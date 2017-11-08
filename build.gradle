@@ -1,24 +1,42 @@
 buildscript {
+    ext.kotlin_version = '1.1.51'
     repositories {
+        mavenCentral()
         jcenter()
         maven { url = "http://files.minecraftforge.net/maven" }
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.1'
     }
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
+apply plugin: 'kotlin'
+apply plugin: 'com.github.johnrengelman.shadow'
+
 //Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 
 
 version = "1.0"
-group = "com.yourname.modid" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "modid"
+group = "com.mrkirby153.tickmonitor" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = "tickmonitor"
 
 sourceCompatibility = targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 compileJava {
     sourceCompatibility = targetCompatibility = '1.8'
 }
+
+configurations {
+    compile.extendsFrom shadow
+}
+
+shadowJar {
+    classifier = null
+    configurations = [project.configurations.shadow]
+    relocate 'me.mrkirby153.kcutils', 'com.mrkirby153.kutils'
+}
+build.dependsOn shadowJar
 
 minecraft {
     version = "1.12.2-14.23.0.2531"
@@ -34,6 +52,8 @@ minecraft {
 }
 
 dependencies {
+    shadow "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
+    shadow "me.mrkirby153:KirbyUtils-Common:2.1-SNAPSHOT"
     // you may put jars on which you depend on in ./libs
     // or you may define them like so..
     //compile "some.group:artifact:version:classifier"
@@ -73,5 +93,22 @@ processResources {
     // copy everything else except the mcmod.info
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
+    }
+}
+repositories {
+    mavenCentral()
+    maven {
+        name = "mrkirby153"
+        url = "https://repo.mrkirby153.com/repository/maven-public/"
+    }
+}
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+compileTestKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
     }
 }
