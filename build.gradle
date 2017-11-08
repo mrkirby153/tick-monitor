@@ -54,6 +54,7 @@ minecraft {
 dependencies {
     shadow "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
     shadow "me.mrkirby153:KirbyUtils-Common:2.1-SNAPSHOT"
+    testCompile "junit:junit:4.12"
     // you may put jars on which you depend on in ./libs
     // or you may define them like so..
     //compile "some.group:artifact:version:classifier"
