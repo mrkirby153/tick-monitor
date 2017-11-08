@@ -15,6 +15,8 @@ class TickMonitor {
 
     val logger: Logger = LogManager.getLogger(Constants.MOD_ID)
 
+    val ignoredWorlds = mutableListOf<Int>()
+
     @Mod.EventHandler
     fun preInit(event: FMLPreInitializationEvent) {
         logger.info("Running pre-init...")
